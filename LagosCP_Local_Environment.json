@@ -1,0 +1,47 @@
+{
+	"id": "lagoscp-local-env",
+	"name": "LagosCP (Local)",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"enabled": true
+		},
+		{
+			"key": "badge_number",
+			"value": "LSP-04821",
+			"enabled": true
+		},
+		{
+			"key": "password",
+			"value": "police123",
+			"enabled": true
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "refresh_token",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "subject_id",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "offence_id",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "station_id",
+			"value": "",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment"
+}

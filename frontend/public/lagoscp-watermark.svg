@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="currentColor">
+  <!-- Simplified crest-like shape for LagosCP -->
+  <path d="M100 10 L180 40 L180 100 C180 150 140 180 100 190 C60 180 20 150 20 100 L20 40 Z" fill="none" stroke="currentColor" stroke-width="4" />
+  <circle cx="100" cy="100" r="40" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="10 5"/>
+  <path d="M80 80 L120 120 M120 80 L80 120" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+  <text x="50%" y="160" font-family="sans-serif" font-weight="bold" font-size="20" text-anchor="middle">LAGOS CP</text>
+  <text x="50%" y="175" font-family="sans-serif" font-size="10" text-anchor="middle">INTELLIGENCE DIV.</text>
+</svg>

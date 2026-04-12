@@ -1,0 +1,604 @@
+{
+	"info": {
+		"_postman_id": "lagoscp-api-suite",
+		"name": "LagosCP — Crime Profiling System API",
+		"description": "Comprehensive API collection for the Lagos State Crime Profiling System (LagosCP). Includes face identification, criminal profiling, offence tracking, and audit trails.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refresh_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "subject_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "offence_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "warrant_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "station_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "officer_id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login (Officer)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('access_token', response.access);",
+									"    pm.collectionVariables.set('refresh_token', response.refresh);",
+									"    pm.collectionVariables.set('officer_id', response.officer.id);",
+									"    console.log('Officer session started: ' + response.officer.full_name);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"badge_number\": \"LSP-04821\",\n  \"password\": \"police123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								""
+							]
+						},
+						"description": "Authenticate an officer using badge number. Defaults to seeded Field Officer."
+					}
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('access_token', response.access);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/refresh/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"refresh",
+								""
+							]
+						}
+					}
+				},
+				{
+					"name": "Get My Profile (Me)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/me/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"me",
+								""
+							]
+						}
+					}
+				},
+				{
+					"name": "List/Filter Officers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/officers/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"officers",
+								""
+							]
+						},
+						"description": "Admin only view of all officers."
+					}
+				},
+				{
+					"name": "Create Peace Station",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('station_id', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Mushin Division HQ\",\n  \"division\": \"D\",\n  \"lga\": \"Mushin\",\n  \"address\": \"Agege Motor Road, Mushin, Lagos\",\n  \"phone\": \"08055551234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/stations/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"stations",
+								""
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Suspect Identification",
+			"item": [
+				{
+					"name": "Identify (Field Scan)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"image\": \"data:image/jpeg;base64,...(base64_string)...\",\n  \"location\": \"Oshodi Underbridge\",\n  \"latitude\": 6.5568,\n  \"longitude\": 3.3488,\n  \"notes\": \"Stopped at routine checkpoint\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/identify/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"identify",
+								""
+							]
+						},
+						"description": "Identify a suspect using facial recognition. Returns match logs, warrants, and offence summary."
+					}
+				},
+				{
+					"name": "Get Identification Logs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/identify/logs/?match_found=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"identify",
+								"logs",
+								""
+							],
+							"query": [
+								{
+									"key": "match_found",
+									"value": "true"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Criminal Profiles (Subjects)",
+			"item": [
+				{
+					"name": "List/Search Subjects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subjects/?search=emeka&status=ACTIVE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subjects",
+								""
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "emeka"
+								},
+								{
+									"key": "status",
+									"value": "ACTIVE"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Subject Profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('subject_id', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"Emeka\",\n  \"last_name\": \"Okafor\",\n  \"aliases\": [\"E-Boy\", \"Chairman\"],\n  \"date_of_birth\": \"1990-03-12\",\n  \"gender\": \"MALE\",\n  \"nationality\": \"Nigerian\",\n  \"state_of_origin\": \"Anambra\",\n  \"lga_of_origin\": \"Onitsha\",\n  \"address\": \"12 Bello Street, Mushin, Lagos\",\n  \"phone_numbers\": [\"+2348012345678\"],\n  \"identifying_marks\": \"Scar above left eyebrow\",\n  \"risk_level\": \"HIGH\",\n  \"status\": \"ACTIVE\",\n  \"is_armed_dangerous\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/subjects/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subjects",
+								""
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Subject Profile (Rich)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subjects/{{subject_id}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subjects",
+								"{{subject_id}}",
+								""
+							]
+						}
+					}
+				},
+				{
+					"name": "Enrol Mugshot (AI Enrolment)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"image\": \"data:image/jpeg;base64,...(base64_string)...\",\n  \"is_primary\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/subjects/{{subject_id}}/enrol-mugshot/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subjects",
+								"{{subject_id}}",
+								"enrol-mugshot",
+								""
+							]
+						},
+						"description": "Uploads mugshot to Cloudinary and enrols the subject in CompreFace Biometric database."
+					}
+				}
+			]
+		},
+		{
+			"name": "Offence Tracking",
+			"item": [
+				{
+					"name": "Log New Offence",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('offence_id', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"subject_id\": \"{{subject_id}}\",\n  \"offence_category\": \"ARMED_ROBBERY\",\n  \"offence_title\": \"Robbery at gunpoint — Oshodi Market\",\n  \"description\": \"Suspect robbed traders at gunpoint.\",\n  \"severity\": \"VIOLENT\",\n  \"incident_date\": \"2025-04-10T14:00:00Z\",\n  \"location\": \"Oshodi Market, Lagos\",\n  \"latitude\": 6.5568,\n  \"longitude\": 3.3488,\n  \"station_id\": \"{{station_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/offences/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"offences",
+								""
+							]
+						},
+						"description": "Log new crime. Code like LG-ARB-2025-00001 is auto-generated."
+					}
+				},
+				{
+					"name": "Update Offence Status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"RESOLVED\",\n  \"court_case_number\": \"HCL/CR/2025/001\",\n  \"penalty_issued\": \"5 years imprisonment\",\n  \"notes\": \"Convicted at High Court\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/offences/{{offence_id}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"offences",
+								"{{offence_id}}",
+								""
+							]
+						},
+						"description": "Supervisor/Admin only: Update the status of a case."
+					}
+				}
+			]
+		},
+		{
+			"name": "Wanted Persons",
+			"item": [
+				{
+					"name": "Issue Arrest Warrant (Add to Wanted)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('warrant_id', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"subject_id\": \"{{subject_id}}\",\n  \"warrant_number\": \"LGS-W-2025-00421\",\n  \"issuing_authority\": \"Lagos State High Court\",\n  \"reason\": \"Escape from legal custody\",\n  \"issued_date\": \"2025-04-01\",\n  \"priority\": \"CRITICAL\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/wanted/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"wanted",
+								""
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Active Wanted List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/wanted/?is_active=true&priority=CRITICAL",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"wanted",
+								""
+							],
+							"query": [
+								{
+									"key": "is_active",
+									"value": "true"
+								},
+								{
+									"key": "priority",
+									"value": "CRITICAL"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Audit Logs",
+			"item": [
+				{
+					"name": "View Activity Trail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/audit/?action=SUBJECT_IDENTIFIED",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"audit",
+								""
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "SUBJECT_IDENTIFIED"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Export Audit CSV",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/audit/export/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"audit",
+								"export",
+								""
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}
