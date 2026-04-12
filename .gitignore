@@ -83,3 +83,5 @@ npm-debug.log
 yarn-error.log
 .gitignore
 .env
+.agent
+.agent\
