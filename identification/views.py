@@ -109,7 +109,8 @@ class IdentifyView(AuditLogMixin, APIView):
                         'warrant_number': active_warrant.warrant_number,
                         'reason': active_warrant.reason,
                         'priority': active_warrant.priority,
-                        'issuing_authority': active_warrant.issuing_authority
+                        'issuing_authority': active_warrant.issuing_authority,
+                        'issued_date': active_warrant.issued_date
                     }
                     
                 # Summarise offences

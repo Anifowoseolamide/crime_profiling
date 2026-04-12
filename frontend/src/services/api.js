@@ -72,6 +72,15 @@ export const api = {
     let subject = res.subject;
     if (subject) {
       subject.name = `${subject.first_name || ''} ${subject.last_name || ''}`.trim();
+      // Add rich metadata needed for scan result modals
+      subject.confidence = res.confidence ? Math.round(res.confidence) : 0;
+      if (res.warrant) {
+        subject.warrantDetails = {
+          issuedBy: res.warrant.issuing_authority || 'Lagos CP',
+          date: res.warrant.issued_date,
+          reason: res.warrant.reason
+        };
+      }
     }
     
     return {

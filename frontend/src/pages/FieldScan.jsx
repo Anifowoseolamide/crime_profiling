@@ -54,7 +54,7 @@ export default function FieldScan() {
           subject={result.subject}
           onDismiss={() => setShowWantedAlert(false)}
           onViewProfile={() => navigate(`/subjects/${result.subject.id}`)}
-          onLogOffence={() => navigate('/offences/new')}
+          onLogOffence={() => navigate(`/offences/new?subject_id=${result.subject.id}`)}
         />
       )}
 
@@ -157,7 +157,7 @@ export default function FieldScan() {
                 <User className="w-4 h-4" /> View Profile
               </button>
               <button
-                onClick={() => navigate('/offences/new')}
+                onClick={() => navigate(`/offences/new?subject_id=${result.subject.id}`)}
                 className="btn-danger py-3 text-sm font-semibold flex items-center justify-center gap-2"
               >
                 <FileText className="w-4 h-4" /> Log Offence

@@ -85,3 +85,5 @@ yarn-error.log
 .env
 .agent
 .agent\
+workflows
+.agent/
