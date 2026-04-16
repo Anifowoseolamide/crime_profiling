@@ -7,29 +7,31 @@ An AI-powered criminal identification and profiling platform built for the Lagos
 ### 1. Suspect Identification (Field Scan)
 - Field officers capture a photo via mobile or desktop webcam.
 - The image is sent to **CompreFace** facial recognition for matching.
-- **Geographic Tracking**: Every scan automatically updates the subject's `last_known_location` and GPS coordinates.
+- **Geographic Tracking**: Every scan automatically updates the subject's `last_known_location` and real-time GPS coordinates.
 - Instantly surfaces the full criminal record and highlights active warrants if found.
 
 ### 2. Crime Record & Offence Tracking
 - Full offence history with classification (Theft, Armed Robbery, Kidnapping, etc.) and severity levels.
-- Auto-generated Case IDs (e.g. `LG-ARB-2025-00184`).
+- Auto-generated Case IDs (e.g. `LG-ARB-2026-00184`).
 - **Subject Timeline**: A unified, chronological feed merging offences, sightings, and warrants.
+- **Mugshot Gallery**: Chronological archive of all suspect photos, each stamped with capture date and a clickable GPS location map link.
 
 ### 3. Geographic Crime Intelligence
-- **Crime Hotspots**: Aggregated map visualization showing incident density and severity across Lagos divisions.
-- **Real-time Map**: Track the last known sightings of Wanted Persons.
+- **Crime Hotspots**: Aggregated map visualization showing incident density and severity.
+- **Real-time Map**: Track sightings of Wanted Persons with **Live Refresh** and **Interactive Tooltips**.
+- **Admin Audit Maps**: Administrators can view officer activity locations directly via clickable Google Maps links in the audit logs.
 
 ### 4. Criminal Profile Management
 - Comprehensive records (A.K.A.s, identifiable marks, known addresses).
 - Multiple mugshots per subject for robust CompreFace AI enrolment.
-- Dynamic Risk Levels (`LOW` to `EXTREME`) and Status (`ACTIVE`, `WANTED`, `INCARCERATED`).
+- Dynamic Risk Levels (`LOW` to `EXTREME`) and Status (`CLEARED`, `WANTED`, `WATCHLIST`).
 
 ### 5. Access Control & Audit Log
 - **Role-Based Access**: 
     - `Field Officer`: Localized scanning and profiling.
     - `Supervisor`: Status management, case resolution, and record creation.
-    - `Admin`: Full command access and officer management.
-- **Immutable Audit Feed**: Every action is irrefutably logged and rendered in a live activity feed.
+    - `Admin`: Full command access, officer management, and global audit oversight.
+- **Immutable Audit Feed**: Every action is irrefutably logged with timestamp, officer ID, and GPS metadata.
 
 ---
 

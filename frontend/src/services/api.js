@@ -148,13 +148,19 @@ export const api = {
   getWantedList: async () => {
     const res = await request('/wanted/?is_active=true');
     const warrants = res.results || res;
-    return Array.isArray(warrants) ? warrants.map(w => {
+    if (!Array.isArray(warrants)) return [];
+    
+    // Deduplicate subjects by ID (one person might have multiple warrants)
+    const uniqueSubjects = new Map();
+    warrants.forEach(w => {
       const s = w.subject;
-      if (s) {
+      if (s && !uniqueSubjects.has(s.id)) {
         s.name = `${s.first_name || ''} ${s.last_name || ''}`.trim();
+        uniqueSubjects.set(s.id, s);
       }
-      return s;
-    }).filter(Boolean) : [];
+    });
+    
+    return Array.from(uniqueSubjects.values());
   },
 
   getAuditLog: async () => {
@@ -172,15 +178,19 @@ export const api = {
     });
   },
 
-  enrolMugshot: async (subjectId, imageBase64) => {
+  enrolMugshot: async (subjectId, imageBase64, coords = null) => {
     return request(`/subjects/${subjectId}/enrol-mugshot/`, {
       method: 'POST',
-      body: JSON.stringify({ image: imageBase64 })
+      body: JSON.stringify({ 
+        image: imageBase64,
+        latitude: coords?.lat,
+        longitude: coords?.lng
+      })
     });
   },
   
   logOffence: async (data) => {
-    // Map frontend's {subjectId, type, date, location, notes, stationId} to backend Offence payload
+    // Map frontend's {subjectId, type, date, location, notes, stationId, latitude, longitude} to backend Offence payload
     const payload = {
       subject_id: data.subjectId,
       station_id: data.stationId,
@@ -190,6 +200,8 @@ export const api = {
       severity: 'MODERATE',
       incident_date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
       location: data.location,
+      latitude: data.latitude,
+      longitude: data.longitude
     };
     
     // Attempt basic mapping

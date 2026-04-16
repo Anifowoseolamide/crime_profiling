@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../services/api';
+import { getCurrentLocation } from '../utils/location';
 import { ArrowLeft, CheckCircle, Loader2, MapPin, Upload } from 'lucide-react';
 
 const OFFENCE_TYPES = [
@@ -41,9 +42,14 @@ export default function LogOffence() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    setLoading(true);
+     setLoading(true);
     try {
-      const result = await api.logOffence(form);
+      const coords = await getCurrentLocation();
+      const result = await api.logOffence({
+        ...form,
+        latitude: coords?.lat,
+        longitude: coords?.lng
+      });
       setSuccess(result.offenceCode);
     } finally {
       setLoading(false);

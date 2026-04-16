@@ -126,11 +126,18 @@ class SubjectMugshotUploadView(AuditLogMixin, APIView):
                 image_url=image_url,
                 is_primary=is_primary,
                 captured_by=request.user,
-                enrolled_in_face_recognition=True
+                enrolled_in_face_recognition=True,
+                latitude=request.data.get('latitude'),
+                longitude=request.data.get('longitude')
             )
             
             # 5. Log activity
-            self.write_audit_log(subject, extra_meta={'mugshot_id': str(mugshot.id), 'url': image_url})
+            self.write_audit_log(subject, extra_meta={
+                'mugshot_id': str(mugshot.id), 
+                'url': image_url,
+                'latitude': mugshot.latitude,
+                'longitude': mugshot.longitude
+            })
             
             serializer = MugshotSerializer(mugshot)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

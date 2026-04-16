@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import { api } from '../services/api';
+import { getCurrentLocation } from '../utils/location';
 import AlertModal from '../components/ui/AlertModal';
 import ConfidenceMeter from '../components/ui/ConfidenceMeter';
 import StatusBadge from '../components/ui/StatusBadge';
@@ -24,7 +25,8 @@ export default function FieldScan() {
     setState(STATES.SCANNING);
 
     try {
-      const data = await api.identifyFace(img, 'Field Location', { lat: 6.5244, lng: 3.3792 });
+      const coords = await getCurrentLocation();
+      const data = await api.identifyFace(img, 'Field Scan', coords);
       setResult(data);
       if (data.match) {
         setState(STATES.MATCH);

@@ -98,6 +98,9 @@ class IdentifyView(AuditLogMixin, APIView):
                 
                 Subject.objects.filter(pk=subject.pk).update(**update_fields)
                 
+                # REFRESH the subject instance to ensure we return the new coordinates
+                subject.refresh_from_db()
+                
                 # Check for active warrants
                 active_warrant = WantedPerson.objects.filter(
                     subject=subject, is_active=True
@@ -105,6 +108,11 @@ class IdentifyView(AuditLogMixin, APIView):
                 
                 if active_warrant:
                     is_wanted = True
+                    # Force synchronize subject status if it fell out of sync
+                    if subject.status != 'WANTED':
+                        subject.status = 'WANTED'
+                        subject.save(update_fields=['status'])
+                        
                     warrant_data = {
                         'warrant_number': active_warrant.warrant_number,
                         'reason': active_warrant.reason,
@@ -112,6 +120,10 @@ class IdentifyView(AuditLogMixin, APIView):
                         'issuing_authority': active_warrant.issuing_authority,
                         'issued_date': active_warrant.issued_date
                     }
+                elif subject.status == 'WANTED':
+                    # If they are marked WANTED but have NO active warrant records, 
+                    # we might want to downgrade them to ACTIVE (optional safety check)
+                    pass
                     
                 # Summarise offences
                 total_offences = Offence.objects.filter(subject=subject).count()

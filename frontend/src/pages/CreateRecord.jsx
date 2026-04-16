@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import { ArrowLeft, ArrowRight, CheckCircle, Camera, Upload, User, Loader2 } from 'lucide-react';
 import { api } from '../services/api';
+import { getCurrentLocation } from '../utils/location';
 
 const STEPS = ['Mugshot', 'Personal Details', 'Initial Offence'];
 
@@ -44,12 +45,15 @@ export default function CreateRecord() {
         phone_numbers: form.phone ? [form.phone] : [],
       };
       
-      const subject = await api.createSubject(subjectData);
+       const subject = await api.createSubject(subjectData);
       setCreatedId(subject.id);
+
+      // Fetch coordinates once for the whole report
+      const coords = await getCurrentLocation();
 
       // 2. Enrol Mugshot if available
       if (mugshot) {
-        await api.enrolMugshot(subject.id, mugshot);
+        await api.enrolMugshot(subject.id, mugshot, coords);
       }
 
       // 3. Log Initial Offence if provided
@@ -59,6 +63,8 @@ export default function CreateRecord() {
           type: form.offenceType,
           date: form.offenceDate,
           location: form.offenceLocation,
+          latitude: coords?.lat,
+          longitude: coords?.lng,
           notes: 'Initial offence logged during record creation.'
         });
       }

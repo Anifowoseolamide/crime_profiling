@@ -9,7 +9,8 @@ class MugshotSerializer(serializers.ModelSerializer):
         model = Mugshot
         fields = [
             'id', 'image_url', 'is_primary', 'capture_date', 
-            'captured_by', 'enrolled_in_face_recognition'
+            'captured_by', 'enrolled_in_face_recognition',
+            'latitude', 'longitude'
         ]
         read_only_fields = ['id', 'capture_date', 'enrolled_in_face_recognition']
 

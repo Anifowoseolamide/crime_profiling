@@ -107,6 +107,10 @@ class Mugshot(models.Model):
     image_url = models.URLField()
     is_primary = models.BooleanField(default=False)
     
+    # Geographic Context
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    
     capture_date = models.DateTimeField(auto_now_add=True)
     captured_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, 

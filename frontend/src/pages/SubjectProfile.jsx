@@ -7,7 +7,7 @@ import Timeline from '../components/ui/Timeline';
 import SkeletonLoader from '../components/ui/SkeletonLoader';
 import { ArrowLeft, MapPin, FileText, Camera, AlertTriangle } from 'lucide-react';
 
-const TABS = ['Overview', 'Timeline', 'Offences'];
+const TABS = ['Overview', 'Timeline', 'Offences', 'Mugshots'];
 
 export default function SubjectProfile() {
   const { id } = useParams();
@@ -198,6 +198,48 @@ export default function SubjectProfile() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+        </div>
+      )}
+
+      {tab === 'Mugshots' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {subject.mugshots?.map((m, i) => (
+            <div key={m.id} className="card-bg rounded-xl overflow-hidden flex flex-col">
+              <img src={m.image_url} alt={`Mugshot ${i+1}`} className="w-full h-48 object-cover grayscale" />
+              <div className="p-4 space-y-2">
+                <div className="flex justify-between items-start">
+                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">
+                    {m.is_primary ? 'Primary Mugshot' : `Variant ${i+1}`}
+                  </div>
+                  <div className="text-[10px] font-mono text-gray-400">
+                    {new Date(m.capture_date).toLocaleDateString()}
+                  </div>
+                </div>
+                {m.latitude && m.longitude ? (
+                  <div className="pt-2 border-t border-border-color-light dark:border-border-color">
+                    <div className="flex items-center gap-1.5 text-xs text-accent-blue font-medium">
+                      <MapPin className="w-3.5 h-3.5" /> Captured Location
+                    </div>
+                    <a 
+                      href={`https://www.google.com/maps?q=${m.latitude},${m.longitude}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-[11px] font-mono text-gray-500 hover:text-accent-blue transition-colors mt-0.5 block"
+                    >
+                      {m.latitude.toFixed(4)}, {m.longitude.toFixed(4)} (Open in Maps)
+                    </a>
+                  </div>
+                ) : (
+                  <div className="text-[11px] text-gray-400 italic">No location data captured</div>
+                )}
+              </div>
+            </div>
+          ))}
+          {(!subject.mugshots || subject.mugshots.length === 0) && (
+            <div className="col-span-full py-12 text-center text-sm text-gray-400 card-bg rounded-xl">
+              No mugshots found for this subject
             </div>
           )}
         </div>
