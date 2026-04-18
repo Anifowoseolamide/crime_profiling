@@ -54,14 +54,7 @@ export default function Login() {
 
         {/* Card */}
         <div className="card-bg rounded-2xl p-6 shadow-xl shadow-black/10 dark:shadow-black/40">
-          {/* Demo hint */}
-          <div className="bg-accent-blue/10 border border-accent-blue/20 rounded-lg px-3 py-2 mb-5 text-xs font-mono text-accent-blue space-y-0.5">
-            <div className="font-bold uppercase tracking-wider">Demo Credentials</div>
-            <div>Field Officer: <span className="text-text-primary-light dark:text-text-primary">1024-FO</span></div>
-            <div>Supervisor:    <span className="text-text-primary-light dark:text-text-primary">2048-SV</span></div>
-            <div>Admin:         <span className="text-text-primary-light dark:text-text-primary">9999-AD</span></div>
-            <div>Password (all): <span className="text-text-primary-light dark:text-text-primary">password123</span></div>
-          </div>
+
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

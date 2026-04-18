@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import StatusBadge from '../components/ui/StatusBadge';
 import ConfidenceMeter from '../components/ui/ConfidenceMeter';
 import Timeline from '../components/ui/Timeline';
@@ -12,10 +13,12 @@ const TABS = ['Overview', 'Timeline', 'Offences', 'Mugshots'];
 export default function SubjectProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [subject, setSubject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [tab, setTab] = useState('Overview');
+  const [updatingRisk, setUpdatingRisk] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -43,6 +46,19 @@ export default function SubjectProfile() {
   if (!subject) return null;
 
   const borderMap = { WANTED: 'border-accent-red', WATCHLIST: 'border-accent-amber', CLEARED: 'border-accent-green' };
+  const canEditRisk = user?.accessLevel >= 2;
+
+  const handleUpdateRisk = async (newRisk) => {
+    try {
+      setUpdatingRisk(true);
+      await api.updateSubject(id, { risk_level: newRisk });
+      setSubject(prev => ({ ...prev, risk_level: newRisk }));
+    } catch(err) {
+      alert("Failed to update risk level: " + err.message);
+    } finally {
+      setUpdatingRisk(false);
+    }
+  };
 
   return (
     <div className="space-y-4 animate-fade-in">
@@ -117,11 +133,30 @@ export default function SubjectProfile() {
       {tab === 'Overview' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="card-bg rounded-xl p-4 space-y-3">
-            <div className="text-xs font-mono font-bold text-gray-400 uppercase tracking-widest">Personal Details</div>
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-xs font-mono font-bold text-gray-400 uppercase tracking-widest">Personal Details</div>
+              {canEditRisk && subject.status !== 'WANTED' && (
+                <div className="flex items-center gap-2">
+                  {updatingRisk && <div className="text-[10px] text-gray-400 animate-pulse">Updating...</div>}
+                  <select 
+                    value={subject.risk_level || 'LOW'}
+                    onChange={(e) => handleUpdateRisk(e.target.value)}
+                    disabled={updatingRisk}
+                    className="text-[10px] font-mono border border-border-color-light dark:border-border-color rounded bg-transparent p-1 text-gray-500 focus:outline-none focus:ring-1 focus:ring-accent-blue"
+                  >
+                    <option value="LOW">Set Risk: LOW</option>
+                    <option value="MEDIUM">Set Risk: MEDIUM</option>
+                    <option value="HIGH">Set Risk: HIGH</option>
+                    <option value="EXTREME">Set Risk: EXTREME</option>
+                  </select>
+                </div>
+              )}
+            </div>
             {[
               { label: 'Full Name', value: subject.name },
               { label: 'Aliases', value: subject.aliases?.join(', ') || '—' },
               { label: 'Status', value: subject.status },
+              { label: 'Risk Level', value: subject.risk_level || 'LOW' },
               { label: 'Last Known Location', value: subject.location },
             ].map(({ label, value }) => (
               <div key={label}>
