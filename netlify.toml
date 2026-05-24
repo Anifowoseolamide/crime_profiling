@@ -9,6 +9,7 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  NPM_FLAGS    = "--legacy-peer-deps"
 
 # SPA fallback — send ALL routes to index.html so React Router works
 [[redirects]]
