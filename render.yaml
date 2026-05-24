@@ -12,12 +12,12 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
-        value: False
+        value: "False"
       - key: ALLOWED_HOSTS
         sync: false
       - key: DATABASE_URL
         fromDatabase:
-          name: campusguard-db
+          name: lagoscp-db
           property: connectionString
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
@@ -25,23 +25,31 @@ services:
         sync: false
       - key: CLOUDINARY_API_SECRET
         sync: false
-      - key: LASU_API_URL
+      - key: FACE_RECOGNITION_PROVIDER
+        value: "facepp"
+      - key: FACEPP_API_KEY
         sync: false
-      - key: LASU_API_KEY
+      - key: FACEPP_API_SECRET
         sync: false
-      - key: EMAIL_HOST_USER
+      - key: FACEPP_THRESHOLD
+        value: "80"
+      - key: FACEPP_OUTER_ID
+        value: "lagoscp_faceset"
+      - key: COMPREFACE_URL
         sync: false
-      - key: EMAIL_HOST_PASSWORD
+      - key: COMPREFACE_API_KEY
         sync: false
       - key: FRONTEND_URL
         sync: false
       - key: CORS_ALLOWED_ORIGINS
         sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
     healthCheckPath: /admin/
 
   # PostgreSQL Database
   - type: pgsql
-    name: campusguard-db
+    name: lagoscp-db
     plan: free  # Change to starter or higher for production
-    databaseName: campusguard_db
-    user: campusguard_user
+    databaseName: lagoscp_db
+    user: lagoscp_user

@@ -90,7 +90,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'campusguard.wsgi.application'
 
 # Database
-DATABASE_URL = os.environ.get('DATABASE_URL')
+# Read DATABASE_URL via decouple so .env file is respected locally,
+# while Render's injected env var also works transparently.
+DATABASE_URL = config('DATABASE_URL', default=None)
 
 if DATABASE_URL:
     DATABASES = {
