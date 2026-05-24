@@ -10,7 +10,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-*.local
+# Only ignore local secret overrides — .env.production is safe to commit
+.env.local
+.env.*.local
 
 # Editor directories and files
 .vscode/*

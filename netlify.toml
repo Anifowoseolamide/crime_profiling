@@ -1,0 +1,17 @@
+# Netlify configuration for LagosCP React SPA
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  # Relative to repository root
+  base    = "frontend"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA fallback — send ALL routes to index.html so React Router works
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
