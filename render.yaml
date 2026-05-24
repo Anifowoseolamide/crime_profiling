@@ -1,11 +1,11 @@
 services:
   # Web Service
   - type: web
-    name: campusguard
+    name: lagoscps
     runtime: python
     plan: free  # Change to starter or higher for production
     buildCommand: "./build.sh"
-    startCommand: "gunicorn campusguard.wsgi:application"
+    startCommand: "gunicorn campusguard.wsgi:application --bind 0.0.0.0:$PORT --workers 2"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
