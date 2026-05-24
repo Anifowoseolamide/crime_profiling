@@ -1,7 +1,7 @@
-# CampusGuard Backend Setup Script
+# LagosCP Backend Setup Script
 # Run this script to set up the database and create initial data
 
-Write-Host "🎓 CampusGuard Backend Setup" -ForegroundColor Cyan
+Write-Host "🎓 LagosCP Backend Setup" -ForegroundColor Cyan
 Write-Host "================================" -ForegroundColor Cyan
 Write-Host ""
 

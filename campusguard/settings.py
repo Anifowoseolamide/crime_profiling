@@ -22,6 +22,10 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 # Allow Render.com domains and configured hosts
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
+# Allow local network access for mobile testing (PWA on same Wi-Fi)
+if '10.49.61.182' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('10.49.61.182')
+
 # Add Render.com domain if deployed
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -86,7 +90,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'campusguard.wsgi.application'
 
 # Database
-DATABASE_URL = os.environ.get('DATABASE_URL')
+# Read DATABASE_URL via decouple so .env file is respected locally,
+# while Render's injected env var also works transparently.
+DATABASE_URL = config('DATABASE_URL', default=None)
 
 if DATABASE_URL:
     DATABASES = {
@@ -163,16 +169,18 @@ SIMPLE_JWT = {
 }
 
 # CORS Settings
+_cors_defaults = 'http://localhost:3000,http://localhost:5173,http://10.49.61.182:5173,http://10.49.61.182:8000'
 CORS_ALLOWED_ORIGINS = config(
     'CORS_ALLOWED_ORIGINS',
-    default='http://localhost:3000,http://localhost:5173'
+    default=_cors_defaults
 ).split(',')
 
 CORS_ALLOW_CREDENTIALS = True
 
+_csrf_defaults = 'http://localhost:3000,http://localhost:5173,http://10.49.61.182:5173,http://10.49.61.182:8000'
 CSRF_TRUSTED_ORIGINS = config(
     'CSRF_TRUSTED_ORIGINS',
-    default='http://localhost:3000,http://localhost:5173'
+    default=_csrf_defaults
 ).split(',')
 
 # Security Settings for Production

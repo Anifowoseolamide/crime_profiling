@@ -5,10 +5,13 @@
 @layer base {
   body {
     @apply bg-surface-light text-text-primary-light font-body transition-colors duration-300;
+    overscroll-behavior-y: none; /* Prevent pull-to-refresh in PWA standalone mode */
+    -webkit-tap-highlight-color: transparent; /* Remove the blue box when tapping items on touch screens */
   }
   
   .dark body {
     @apply bg-surface text-text-primary font-body;
+    overscroll-behavior-y: none;
   }
 
   h1, h2, h3, h4, h5, h6 {

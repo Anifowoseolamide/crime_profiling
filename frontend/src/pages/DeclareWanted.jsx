@@ -14,7 +14,7 @@ export default function DeclareWanted() {
     warrantNumber: `WR-${Math.floor(10000 + Math.random() * 90000)}`,
     issuingAuthority: 'Lagos State Police Command',
     reason: '',
-    priority: 'MEDIUM',
+    priority: 'ROUTINE',
     expiryDate: ''
   });
 
@@ -113,9 +113,8 @@ export default function DeclareWanted() {
               onChange={e => set('priority', e.target.value)}
               className="input-field"
             >
-              <option value="LOW">LOW</option>
-              <option value="MEDIUM">MEDIUM</option>
-              <option value="HIGH">HIGH</option>
+              <option value="ROUTINE">ROUTINE</option>
+              <option value="URGENT">URGENT</option>
               <option value="CRITICAL">CRITICAL</option>
             </select>
           </div>

@@ -132,6 +132,13 @@ export const api = {
     return subject;
   },
 
+  updateSubject: async (id, data) => {
+    return request(`/subjects/${id}/`, {
+      method: 'PATCH',
+      body: JSON.stringify(data)
+    });
+  },
+
   searchSubjects: async (queryStr = "", statusFilter = "ALL") => {
     let url = `/subjects/?search=${encodeURIComponent(queryStr)}`;
     if (statusFilter !== "ALL") {
@@ -165,6 +172,10 @@ export const api = {
 
   getAuditLog: async () => {
     return request('/audit/feed/');
+  },
+  
+  getAuditList: async (page = 1) => {
+    return request(`/audit/?page=${page}`);
   },
   
   getStations: async () => {
