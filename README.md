@@ -27,7 +27,7 @@ An **AI-powered criminal identification and profiling platform** built for the L
 19. [Developer Workflow](#-developer-workflow)
 20. [Troubleshooting](#-troubleshooting)
 21. [Integration Resources](#-integration-resources)
-22. [First 10 Minutes](#-first-10-minutes)
+
 
 ---
 
