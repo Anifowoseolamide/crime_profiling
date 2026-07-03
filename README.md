@@ -23,6 +23,11 @@ An **AI-powered criminal identification and profiling platform** built for the L
 15. [Test Accounts](#-test-accounts)
 16. [Deployment](#-deployment)
 17. [Academic Context](#-academic-context)
+18. [Repository Layout](#-repository-layout)
+19. [Developer Workflow](#-developer-workflow)
+20. [Troubleshooting](#-troubleshooting)
+21. [Integration Resources](#-integration-resources)
+22. [First 10 Minutes](#-first-10-minutes)
 
 ---
 
@@ -525,10 +530,10 @@ api.identify(payload)           // POST /api/identify/
 ### 1. Clone & create virtual environment
 ```bash
 git clone <repo-url>
-cd CampusGuard
-python -m venv campusvenv
-campusvenv\Scripts\activate        # Windows
-# source campusvenv/bin/activate   # macOS / Linux
+cd crime_profiling
+python -m venv venv
+venv\Scripts\activate              # Windows
+# source venv/bin/activate          # macOS / Linux
 ```
 
 ### 2. Install backend dependencies
@@ -538,7 +543,7 @@ pip install -r requirements.txt
 
 ### 3. Configure environment
 ```bash
-copy .env .env.local   # fill in values — see Environment Variables section
+# Create a .env file in project root and add required values
 ```
 
 ### 4. Create database
@@ -575,6 +580,8 @@ npm run dev                  # http://localhost:5173
 ---
 
 ## ⚙️ Environment Variables
+
+Create a `.env` file in the project root and populate the values below.
 
 ```ini
 # Django core
@@ -652,6 +659,152 @@ gunicorn campusguard.wsgi:application
 - `ALLOWED_HOSTS` — includes your Render hostname
 - All Cloudinary credentials populated
 - `FACE_RECOGNITION_PROVIDER` + respective API keys set
+
+---
+
+## 📁 Repository Layout
+
+| Path | Purpose |
+|---|---|
+| `campusguard/` | Django project config (`settings.py`, root URL routing, WSGI/ASGI) |
+| `authentication/` | Custom officer user model, station management, JWT auth endpoints |
+| `subjects/` | Criminal profile and mugshot management |
+| `offences/` | Case/offence lifecycle and offence analytics |
+| `wanted/` | Warrant issuance, updates, and status synchronization |
+| `identification/` | Field identification endpoint + identification logs |
+| `audit/` | Immutable audit logging models, serializers, and endpoints |
+| `services/` | Face recognition provider integrations (`faceplusplus.py`, `compreface.py`) |
+| `frontend/` | React + Vite SPA (pages, map UI, API service layer) |
+| `create_admin.py` | Seeds default station and test officers |
+| `setup.ps1` | Optional PowerShell setup helper for Windows development |
+| `render.yaml` / `build.sh` | Render deployment configuration |
+
+---
+
+## 🧪 Developer Workflow
+
+### Daily startup (Windows)
+```powershell
+venv\Scripts\Activate.ps1
+python manage.py migrate
+python manage.py runserver
+```
+
+In another terminal:
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+### Seed default users and station
+```bash
+python create_admin.py
+```
+
+### Useful backend commands
+```bash
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py shell
+python manage.py test
+```
+
+### Useful frontend commands
+```bash
+cd frontend
+npm run dev
+npm run build
+npm run lint
+npm run preview
+```
+
+---
+
+## ✅ First 10 Minutes
+
+Use this checklist when onboarding a new machine or contributor.
+
+1. Clone and enter the repo
+```bash
+git clone <repo-url>
+cd crime_profiling
+```
+
+2. Create and activate a Python virtual environment
+```powershell
+python -m venv venv
+venv\Scripts\Activate.ps1
+```
+
+3. Install backend dependencies and run migrations
+```bash
+pip install -r requirements.txt
+python manage.py migrate
+```
+
+4. Create or update your `.env` file with database and API keys
+
+5. Seed default officers and station
+```bash
+python create_admin.py
+```
+
+6. Start the backend API
+```bash
+python manage.py runserver
+```
+
+7. Start the frontend in a second terminal
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+8. Verify all key URLs open successfully
+- Frontend: `http://localhost:5173`
+- API docs: `http://localhost:8000/api/docs/`
+- Admin: `http://localhost:8000/admin/`
+
+9. Login with a seeded test account from the Test Accounts section
+
+10. Run one smoke test: submit a sample identification request from Swagger or Postman
+
+---
+
+## 🛠 Troubleshooting
+
+### `ModuleNotFoundError` or missing packages
+- Ensure your virtual environment is active before running Django commands.
+- Reinstall dependencies with `pip install -r requirements.txt`.
+
+### `FATAL: password authentication failed for user "postgres"`
+- Confirm `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` in `.env`.
+- Ensure PostgreSQL is running and user permissions allow database access.
+
+### `Invalid HTTP_HOST header` on mobile/LAN testing
+- Add your local machine IP to `ALLOWED_HOSTS`.
+- Add matching origins to `CORS_ALLOWED_ORIGINS` and `CSRF_TRUSTED_ORIGINS`.
+
+### Face recognition always returns no match
+- Confirm `FACE_RECOGNITION_PROVIDER` is set correctly (`facepp` or `compreface`).
+- Verify provider credentials and thresholds (`FACEPP_THRESHOLD` or `COMPREFACE_THRESHOLD`).
+- If using CompreFace locally, confirm `COMPREFACE_URL` is reachable.
+
+### Static files not loading in production
+- Ensure `python manage.py collectstatic --no-input` runs during build.
+- Verify WhiteNoise middleware and `STATIC_ROOT` are configured.
+
+---
+
+## 🔗 Integration Resources
+
+- Postman collection: `LagosCP_API_Collection.postman_collection.json`
+- Local environment template: `LagosCP_Local_Environment.json`
+- Frontend integration notes: `FRONTEND_INTEGRATION_GUIDE.md`
+- Deployment summary: `deployment_prep_summary.md`
 
 ---
 
