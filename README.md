@@ -833,9 +833,17 @@ This project was developed as a **Final Year Project** for the B.Sc. Computer Sc
 ### Suggested Future Work
 
 - **Celery + Redis** — async mugshot enrolment, report generation, scheduled warrant expiry checks
-commitdev whoami
+
 
 ---
 
 *LagosCP — Secure, Transparent, Intelligent Policing.*
 *Built with Django · React · PostgreSQL · Face++ · Leaflet*
+## 5. Recommended Frontend NPM Packages
+
+- `react-router-dom` v6+
+- `react-webcam` (for taking photos in `/field-scan`)
+- `lucide-react` (for icons)
+- `zustand` (for global logged-in officer state tracking)
+- `axios`
+- `tailwindcss` (recommended for rapid dark-mode UX composition)
