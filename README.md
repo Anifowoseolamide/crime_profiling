@@ -833,11 +833,7 @@ This project was developed as a **Final Year Project** for the B.Sc. Computer Sc
 ### Suggested Future Work
 
 - **Celery + Redis** — async mugshot enrolment, report generation, scheduled warrant expiry checks
-- **WebSocket push alerts** — real-time warrant notifications to officer devices
-- **Mobile PWA** — installable progressive web app for true field deployment
-- **Bulk CSV import** — migration tool for legacy paper-based station records
-- **INTERPOL feed integration** — cross-reference subjects against international wanted lists
-- **Offline-first identification** — local face embedding cache for areas with poor connectivity
+commitdev whoami
 
 ---
 
