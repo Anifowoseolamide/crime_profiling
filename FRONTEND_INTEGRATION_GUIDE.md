@@ -87,3 +87,11 @@ Frontend components (like "Edit Case Status" buttons or "Issue Warrant" buttons)
 - The API uses typical DRF format for 400 Bad Requests: `{ "field_name": ["error message..."] }`. 
 - 401 Unauthorized denotes expired tokens; standard axios response interceptors should catch this and attempt `POST /api/auth/refresh/`.
 
+## 5. Recommended Frontend NPM Packages
+
+- `react-router-dom` v6+
+- `react-webcam` (for taking photos in `/field-scan`)
+- `lucide-react` (for icons)
+- `zustand` (for global logged-in officer state tracking)
+- `axios`
+- `tailwindcss` (recommended for rapid dark-mode UX composition)
