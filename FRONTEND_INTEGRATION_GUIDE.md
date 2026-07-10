@@ -95,3 +95,12 @@ Frontend components (like "Edit Case Status" buttons or "Issue Warrant" buttons)
 - `zustand` (for global logged-in officer state tracking)
 - `axios`
 - `tailwindcss` (recommended for rapid dark-mode UX composition)
+
+## 5. Recommended Frontend NPM Packages
+
+- `react-router-dom` v6+
+- `react-webcam` (for taking photos in `/field-scan`)
+- `lucide-react` (for icons)
+- `zustand` (for global logged-in officer state tracking)
+- `axios`
+- `tailwindcss` (recommended for rapid dark-mode UX composition)
