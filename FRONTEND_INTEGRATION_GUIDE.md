@@ -82,3 +82,9 @@ Frontend components (like "Edit Case Status" buttons or "Issue Warrant" buttons)
 - `SUPERVISOR`: Can edit offence status/penalties, issue warrants, and read audit logs.
 - `ADMIN`: Full CRUD management, including access to manage other Officers.
 
+## 4. API Error Handling
+
+- The API uses typical DRF format for 400 Bad Requests: `{ "field_name": ["error message..."] }`. 
+- 401 Unauthorized denotes expired tokens; standard axios response interceptors should catch this and attempt `POST /api/auth/refresh/`.
+
+
