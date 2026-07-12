@@ -81,10 +81,8 @@ Frontend components (like "Edit Case Status" buttons or "Issue Warrant" buttons)
 - `FIELD_OFFICER`: Can read profiles, scan suspects, log new offences, view warrants. Cannot edit case statuses, emit new warrants, or read audit logs.
 - `SUPERVISOR`: Can edit offence status/penalties, issue warrants, and read audit logs.
 - `ADMIN`: Full CRUD management, including access to manage other Officers.
-
-## 4. API Error Handling
-
-- The API uses typical DRF format for 400 Bad Requests: `{ "field_name": ["error message..."] }`. 
-- 401 Unauthorized denotes expired tokens; standard axios response interceptors should catch this and attempt `POST /api/auth/refresh/`.
-
+Frontend components (like "Edit Case Status" buttons or "Issue Warrant" buttons) should be heavily protected client-side utilizing the embedded `token.officer.role` data:
+- `FIELD_OFFICER`: Can read profiles, scan suspects, log new offences, view warrants. Cannot edit case statuses, emit new warrants, or read audit logs.
+- `SUPERVISOR`: Can edit offence status/penalties, issue warrants, and read audit logs.
+- `ADMIN`: Full CRUD management, including access to manage other Officers.
 
